@@ -1,5 +1,8 @@
 ﻿Imports System.ComponentModel
+Imports System.Drawing
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
+
 Public Class Form1
     Private Declare Sub mouse_event Lib "user32" (ByVal dwFlags As Long, ByVal dx As Long, ByVal dy As Long, ByVal dwData As Long, ByVal dwExtraInfo As Long)
     Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vKey As Long) As Integer
@@ -67,6 +70,7 @@ Public Class Form1
 
     End Structure
 
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property KeyHookEnable() As Boolean
         Get
             Return mHandle <> IntPtr.Zero
@@ -86,7 +90,8 @@ Public Class Form1
         lParam As KBDLLHOOKSTRUCT) As IntPtr
         Dim fEatKeyStroke As Boolean
         If nCode = HC_ACTION Then
-            If lParam.vkCode = My.Settings.KeyCode Then
+            'If lParam.vkCode = My.Settings.KeyCode Then
+            If lParam.vkCode = TextBox1.Text Then
                 stopAction(True)
                 fEatKeyStroke = True
             Else
@@ -112,7 +117,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lbl_Status.Text = "Bereit"
-        TextBox1.Text = My.Settings.ShortcutKeyToStop
+        'TextBox1.Text = My.Settings.ShortcutKeyToStop
         tmr_getcurpos.Start()
     End Sub
 
@@ -123,9 +128,9 @@ Public Class Form1
 
     Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBox1.KeyDown
         TextBox1.Text = Chr(e.KeyCode)
-        My.Settings.ShortcutKeyToStop = TextBox1.Text
-        My.Settings.KeyCode = e.KeyCode
-        My.Settings.Save()
+        'My.Settings.ShortcutKeyToStop = TextBox1.Text
+        'My.Settings.KeyCode = e.KeyCode
+        'My.Settings.Save()
         e.SuppressKeyPress = True
         e.Handled = True
     End Sub
